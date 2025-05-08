@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reportes - Finanzas360</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #2e7d32;
+      --secondary-color: #81c784;
+      --accent-color: #ffab00;
+      --danger-color: #d32f2f;
+      --light-bg: #f5f5f5;
+      --card-bg: #ffffff;
+      --text-dark: #263238;
+      --text-medium: #546e7a;
+      --text-light: #b0bec5;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--light-bg);
+      color: var(--text-dark);
+      line-height: 1.6;
+    }
+    
+    .container {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      min-height: 100vh;
+    }
+    
+    /* Sidebar */
+    .sidebar {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 2rem 1rem;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 2.5rem;
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+    
+    .logo i {
+      font-size: 1.5rem;
+    }
+    
+    .nav-menu {
+      list-style: none;
+    }
+    
+    .nav-item {
+      margin-bottom: 0.75rem;
+    }
+    
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+    
+    .nav-link:hover, .nav-link.active {
+      background-color: rgba(255, 255, 255, 0.15);
+    }
+    
+    .nav-link i {
+      width: 24px;
+      text-align: center;
+    }
+    
+    /* Main Content */
+    .main-content {
+      padding: 2rem;
+    }
+    
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+    
+    .page-title {
+      font-size: 1.75rem;
+      font-weight: 600;
+    }
+    
+    .user-menu {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: var(--secondary-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+    }
+    
+    /* Dashboard Grid */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 1.5rem;
+    }
+    
+    .card {
+      background-color: var(--card-bg);
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+    }
+    
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--text-medium);
+    }
+    
+    .card-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+    
+    .btn {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 6px;
+      font-family: inherit;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .btn-sm {
+      padding: 0.35rem 0.75rem;
+      font-size: 0.85rem;
+    }
+    
+    .btn-primary {
+      background-color: var(--primary-color);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background-color: #1b5e20;
+    }
+    
+    .btn-outline {
+      background-color: transparent;
+      border: 1px solid var(--text-light);
+      color: var(--text-medium);
+    }
+    
+    .btn-outline:hover {
+      border-color: var(--text-medium);
+    }
+    
+    .btn-accent {
+      background-color: var(--accent-color);
+      color: white;
+    }
+    
+    .btn-accent:hover {
+      background-color: #ff8f00;
+    }
+    
+    /* Charts */
+    .chart-card {
+      grid-column: span 12;
+      height: 400px;
+    }
+    
+    .chart-container {
+      position: relative;
+      height: calc(100% - 40px);
+      width: 100%;
+    }
+    
+    /* Strategy Cards */
+    .strategy-card {
+      grid-column: span 4;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+    }
+    
+    .strategy-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+    
+    .strategy-card.selected {
+      border-color: var(--primary-color);
+      background-color: #e8f5e9;
+    }
+    
+    .strategy-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      color: var(--primary-color);
+    }
+    
+    .strategy-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    
+    .strategy-description {
+      color: var(--text-medium);
+      font-size: 0.9rem;
+    }
+    
+    /* Report Card */
+    .report-card {
+      grid-column: span 12;
+      background-color: #f9f9f9;
+    }
+    
+    .report-section {
+      margin-bottom: 1.5rem;
+    }
+    
+    .report-section-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      color: var(--primary-color);
+    }
+    
+    .report-content {
+      background-color: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+    
+    .report-item {
+      margin-bottom: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .report-item:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+    
+    .report-item-title {
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+    
+    .report-item-value {
+      color: var(--text-medium);
+    }
+    
+    .report-item-value.positive {
+      color: var(--primary-color);
+      font-weight: 500;
+    }
+    
+    .report-item-value.negative {
+      color: var(--danger-color);
+      font-weight: 500;
+    }
+    
+    /* Responsive */
+    @media (max-width: 1200px) {
+      .strategy-card {
+        grid-column: span 6;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+      
+      .sidebar {
+        display: none;
+      }
+      
+      .strategy-card {
+        grid-column: span 12;
+      }
+    }
+    
+    /* Modal */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    
+    .modal.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+    
+    .modal-content {
+      background-color: white;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 600px;
+      max-height: 90vh;
+      overflow-y: auto;
+      transform: translateY(20px);
+      transition: transform 0.3s ease;
+    }
+    
+    .modal.active .modal-content {
+      transform: translateY(0);
+    }
+    
+    .modal-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .modal-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+    
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--text-medium);
+    }
+    
+    .modal-body {
+      padding: 1.5rem;
+    }
+    
+    .modal-footer {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid #eee;
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.75rem;
+    }
+    
+    /* Loading Spinner */
+    .spinner {
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      border: 3px solid rgba(0,0,0,.1);
+      border-radius: 50%;
+      border-top-color: var(--primary-color);
+      animation: spin 1s ease-in-out infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar">
+      <div class="logo">
+        <i class="fas fa-chart-pie"></i>
+        <span>Finanzas360</span>
+      </div>
+      <ul class="nav-menu">
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fas fa-home"></i>
+            <span>Inicio</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fas fa-wallet"></i>
+            <span>Transacciones</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fas fa-chart-line"></i>
+            <span>Presupuestos</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link active">
+            <i class="fas fa-file-alt"></i>
+            <span>Reportes</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fas fa-piggy-bank"></i>
+            <span>Ahorros</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fas fa-cog"></i>
+            <span>Configuración</span>
+          </a>
+        </li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <div class="header">
+        <h1 class="page-title">Reportes Financieros</h1>
+        <div class="user-menu">
+          <div class="user-avatar">JD</div>
+        </div>
+      </div>
+
+      <div class="dashboard-grid">
+        <!-- Gráfico principal -->
+        <div class="card chart-card">
+          <div class="card-header">
+            <h3 class="card-title">Resumen Financiero</h3>
+            <div class="card-actions">
+              <button class="btn btn-sm btn-outline">
+                <i class="fas fa-calendar-alt"></i> Últimos 6 meses
+              </button>
+            </div>
+          </div>
+          <div class="chart-container">
+            <canvas id="financialChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Selección de estrategia -->
+        <div class="card" style="grid-column: span 12">
+          <div class="card-header">
+            <h3 class="card-title">Selecciona tu Estrategia de Inversión</h3>
+          </div>
+          <div style="padding: 1rem;">
+            <div class="dashboard-grid">
+              <div class="card strategy-card" id="conservativeStrategy">
+                <div class="strategy-icon">
+                  <i class="fas fa-shield-alt"></i>
+                </div>
+                <h4 class="strategy-title">Conservador</h4>
+                <p class="strategy-description">Bajo riesgo, crecimiento lento pero seguro</p>
+              </div>
+              
+              <div class="card strategy-card selected" id="moderateStrategy">
+                <div class="strategy-icon">
+                  <i class="fas fa-balance-scale"></i>
+                </div>
+                <h4 class="strategy-title">Moderado</h4>
+                <p class="strategy-description">Balance entre riesgo y crecimiento</p>
+              </div>
+              
+              <div class="card strategy-card" id="aggressiveStrategy">
+                <div class="strategy-icon">
+                  <i class="fas fa-chart-line"></i>
+                </div>
+                <h4 class="strategy-title">Agresivo</h4>
+                <p class="strategy-description">Alto riesgo, potencial de alto crecimiento</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Informe generado por IA -->
+        <div class="card report-card">
+          <div class="card-header">
+            <h3 class="card-title">Informe de Análisis Financiero</h3>
+            <button class="btn btn-primary" id="generateReportBtn">
+              <i class="fas fa-magic"></i> Generar Informe con IA
+            </button>
+          </div>
+          
+          <div class="report-content">
+            <div class="report-section">
+              <h4 class="report-section-title">Resumen Actual</h4>
+              <div class="report-item">
+                <div class="report-item-title">Ingresos Mensuales Promedio</div>
+                <div class="report-item-value">$3,200</div>
+              </div>
+              <div class="report-item">
+                <div class="report-item-title">Gastos Mensuales Promedio</div>
+                <div class="report-item-value negative">$2,800</div>
+              </div>
+              <div class="report-item">
+                <div class="report-item-title">Ahorro Mensual</div>
+                <div class="report-item-value positive">$400</div>
+              </div>
+            </div>
+            
+            <div class="report-section">
+              <h4 class="report-section-title">Recomendaciones para Estrategia Moderada</h4>
+              <div class="report-item">
+                <div class="report-item-title">Distribución de Ahorros</div>
+                <div class="report-item-value">50% Fondos de inversión, 30% Acciones estables, 20% Bonos</div>
+              </div>
+              <div class="report-item">
+                <div class="report-item-title">Áreas para Reducir Gastos</div>
+                <div class="report-item-value">Entretenimiento (-15%), Comidas fuera (-10%), Suscripciones (-5%)</div>
+              </div>
+              <div class="report-item">
+                <div class="report-item-title">Proyección de Crecimiento</div>
+                <div class="report-item-value positive">6-8% anual estimado con esta estrategia</div>
+              </div>
+            </div>
+            
+            <div class="report-section">
+              <h4 class="report-section-title">Metas Personalizadas</h4>
+              <div class="report-item">
+                <div class="report-item-title">Meta a Corto Plazo (1 año)</div>
+                <div class="report-item-value">Ahorrar $5,000 para fondo de emergencia</div>
+              </div>
+              <div class="report-item">
+                <div class="report-item-title">Meta a Mediano Plazo (5 años)</div>
+                <div class="report-item-value">Acumular $30,000 para enganche de vivienda</div>
+              </div>
+              <div class="report-item">
+                <div class="report-item-title">Meta a Largo Plazo (10+ años)</div>
+                <div class="report-item-value">Fondo de retiro de $250,000</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal de carga -->
+  <div class="modal" id="loadingModal">
+    <div class="modal-content" style="max-width: 300px; text-align: center;">
+      <div class="modal-body">
+        <div class="spinner" style="width: 40px; height: 40px; margin-bottom: 1rem;"></div>
+        <h3>Generando informe con IA</h3>
+        <p>Analizando tus datos financieros...</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Configuración del gráfico principal
+      const ctx = document.getElementById('financialChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'],
+          datasets: [
+            {
+              label: 'Ingresos',
+              data: [3200, 3400, 3100, 3500, 3800, 3600],
+              backgroundColor: '#2e7d32',
+              borderRadius: 4
+            },
+            {
+              label: 'Gastos',
+              data: [2800, 2900, 3100, 3000, 3200, 3100],
+              backgroundColor: '#d32f2f',
+              borderRadius: 4
+            },
+            {
+              label: 'Ahorros',
+              data: [400, 500, 0, 500, 600, 500],
+              backgroundColor: '#ffab00',
+              borderRadius: 4
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: {
+              stacked: false,
+              grid: {
+                display: false
+              }
+            },
+            y: {
+              stacked: false,
+              beginAtZero: true,
+              ticks: {
+                callback: function(value) {
+                  return '$' + value;
+                }
+              }
+            }
+          },
+          plugins: {
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  return context.dataset.label + ': $' + context.raw;
+                }
+              }
+            },
+            legend: {
+              position: 'top',
+              align: 'end'
+            }
+          }
+        }
+      });
+
+      // Selección de estrategia
+      const strategies = [
+        document.getElementById('conservativeStrategy'),
+        document.getElementById('moderateStrategy'),
+        document.getElementById('aggressiveStrategy')
+      ];
+      
+      strategies.forEach(strategy => {
+        strategy.addEventListener('click', function() {
+          strategies.forEach(s => s.classList.remove('selected'));
+          this.classList.add('selected');
+        });
+      });
+
+      // Generar informe con IA
+      const generateBtn = document.getElementById('generateReportBtn');
+      const loadingModal = document.getElementById('loadingModal');
+      
+      generateBtn.addEventListener('click', function() {
+        // Mostrar modal de carga
+        loadingModal.classList.add('active');
+        
+        // Simular análisis de IA (en producción sería una llamada a API)
+        setTimeout(function() {
+          loadingModal.classList.remove('active');
+          
+          // Aquí iría la actualización del informe con los datos reales
+          alert('Informe generado exitosamente. Se han actualizado las recomendaciones.');
+        }, 3000);
+      });
+    });
+  </script>
+</body>
+</html>

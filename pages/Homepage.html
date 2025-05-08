@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Finanzas360 - Gestión Financiera Integral</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/luxon@3.0.1"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.2.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+  <style>
+    :root {
+      --primary-color: #2e7d32;
+      --secondary-color: #81c784;
+      --accent-color: #ffab00;
+      --danger-color: #d32f2f;
+      --light-bg: #f5f5f5;
+      --card-bg: #ffffff;
+      --text-dark: #263238;
+      --text-medium: #546e7a;
+      --text-light: #b0bec5;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--light-bg);
+      color: var(--text-dark);
+      line-height: 1.6;
+    }
+    
+    .container {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      min-height: 100vh;
+    }
+    
+    /* Sidebar */
+    .sidebar {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 2rem 1rem;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 2.5rem;
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+    
+    .logo i {
+      font-size: 1.5rem;
+    }
+    
+    .nav-menu {
+      list-style: none;
+    }
+    
+    .nav-item {
+      margin-bottom: 0.75rem;
+    }
+    
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+    
+    .nav-link:hover, .nav-link.active {
+      background-color: rgba(255, 255, 255, 0.15);
+    }
+    
+    .nav-link i {
+      width: 24px;
+      text-align: center;
+    }
+    
+    /* Main Content */
+    .main-content {
+      padding: 2rem;
+    }
+    
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+    
+    .page-title {
+      font-size: 1.75rem;
+      font-weight: 600;
+    }
+    
+    .user-menu {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: var(--secondary-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+    }
+    
+    /* Dashboard Grid */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 1.5rem;
+    }
+    
+    .card {
+      background-color: var(--card-bg);
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+    }
+    
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--text-medium);
+    }
+    
+    .card-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+    
+    .btn {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 6px;
+      font-family: inherit;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .btn-sm {
+      padding: 0.35rem 0.75rem;
+      font-size: 0.85rem;
+    }
+    
+    .btn-primary {
+      background-color: var(--primary-color);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background-color: #1b5e20;
+    }
+    
+    .btn-outline {
+      background-color: transparent;
+      border: 1px solid var(--text-light);
+      color: var(--text-medium);
+    }
+    
+    .btn-outline:hover {
+      border-color: var(--text-medium);
+    }
+    
+    /* Stats Cards */
+    .stat-card {
+      grid-column: span 3;
+    }
+    
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    
+    .stat-label {
+      color: var(--text-medium);
+      font-size: 0.9rem;
+    }
+    
+    .stat-change {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      font-size: 0.85rem;
+      margin-top: 0.5rem;
+    }
+    
+    .positive {
+      color: var(--primary-color);
+    }
+    
+    .negative {
+      color: var(--danger-color);
+    }
+    
+    /* Charts */
+    .chart-card {
+      grid-column: span 6;
+      height: 350px;
+    }
+    
+    .chart-container {
+      position: relative;
+      height: calc(100% - 40px);
+      width: 100%;
+    }
+    
+    /* Transactions */
+    .transactions-card {
+      grid-column: span 4;
+    }
+    
+    .transaction {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .transaction:last-child {
+      border-bottom: none;
+    }
+    
+    .transaction-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .transaction-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+    }
+    
+    .income {
+      background-color: var(--primary-color);
+    }
+    
+    .expense {
+      background-color: var(--danger-color);
+    }
+    
+    .transaction-details h4 {
+      font-size: 0.95rem;
+      margin-bottom: 0.25rem;
+    }
+    
+    .transaction-details p {
+      font-size: 0.8rem;
+      color: var(--text-medium);
+    }
+    
+    .transaction-amount {
+      font-weight: 500;
+    }
+    
+    /* Budgets */
+    .budgets-card {
+      grid-column: span 4;
+    }
+    
+    .budget-item {
+      margin-bottom: 1rem;
+    }
+    
+    .budget-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+    }
+    
+    .budget-category {
+      font-weight: 500;
+    }
+    
+    .budget-amount {
+      color: var(--text-medium);
+      font-size: 0.9rem;
+    }
+    
+    .progress-bar {
+      height: 8px;
+      background-color: #e0e0e0;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    
+    .progress {
+      height: 100%;
+      background-color: var(--primary-color);
+      border-radius: 4px;
+    }
+    
+    /* Responsive */
+    @media (max-width: 1200px) {
+      .stat-card {
+        grid-column: span 6;
+      }
+      
+      .chart-card {
+        grid-column: span 12;
+      }
+      
+      .transactions-card, .budgets-card {
+        grid-column: span 6;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+      
+      .sidebar {
+        display: none;
+      }
+      
+      .stat-card, .transactions-card, .budgets-card {
+        grid-column: span 12;
+      }
+    }
+    
+    /* Form Styles */
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    
+    .form-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: var(--text-medium);
+    }
+    
+    .form-control {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-family: inherit;
+      transition: border 0.3s ease;
+    }
+    
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary-color);
+    }
+    
+    /* Modal */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    
+    .modal.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+    
+    .modal-content {
+      background-color: white;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 500px;
+      max-height: 90vh;
+      overflow-y: auto;
+      transform: translateY(20px);
+      transition: transform 0.3s ease;
+    }
+    
+    .modal.active .modal-content {
+      transform: translateY(0);
+    }
+    
+    .modal-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .modal-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+    
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--text-medium);
+    }
+    
+    .modal-body {
+      padding: 1.5rem;
+    }
+    
+    .modal-footer {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid #eee;
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.75rem;
+    }
+    
+    /* Tabs */
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid #eee;
+      margin-bottom: 1.5rem;
+    }
+    
+    .tab {
+      padding: 0.75rem 1.5rem;
+      cursor: pointer;
+      color: var(--text-medium);
+      font-weight: 500;
+      border-bottom: 2px solid transparent;
+      transition: all 0.3s ease;
+    }
+    
+    .tab.active {
+      color: var(--primary-color);
+      border-bottom-color: var(--primary-color);
+    }
+    
+    /* Date Range Selector */
+    .date-range-selector {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .date-range-btn {
+      padding: 0.5rem 1rem;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      background: none;
+      cursor: pointer;
+      color: var(--text-medium);
+      transition: all 0.3s ease;
+    }
+    
+    .date-range-btn.active {
+      background-color: var(--primary-color);
+      color: white;
+      border-color: var(--primary-color);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="logo">
+        <i class="fas fa-chart-line"></i>
+        <span>Finanzas360</span>
+      </div>
+      <ul class="nav-menu">
+        <li class="nav-item">
+          <a href="#" class="nav-link active">
+            <i class="fas fa-home"></i>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fas fa-wallet"></i>
+            <span>Transacciones</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fas fa-chart-pie"></i>
+            <span>Presupuestos</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fas fa-chart-bar"></i>
+            <span>Reportes</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fas fa-bell"></i>
+            <span>Alertas</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fas fa-cog"></i>
+            <span>Ajustes</span>
+          </a>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="header">
+        <h1 class="page-title">Dashboard Financiero</h1>
+        <div class="user-menu">
+          <div class="user-avatar">JD</div>
+        </div>
+      </div>
+
+      <!-- Date Range Selector -->
+      <div class="date-range-selector">
+        <button class="date-range-btn active">Hoy</button>
+        <button class="date-range-btn">Semana</button>
+        <button class="date-range-btn">Mes</button>
+        <button class="date-range-btn">Año</button>
+        <button class="date-range-btn">Personalizado</button>
+      </div>
+
+      <!-- Dashboard Grid -->
+      <div class="dashboard-grid">
+        <!-- Stat Cards -->
+        <div class="card stat-card">
+          <div class="card-header">
+            <h3 class="card-title">Balance Total</h3>
+            <div class="card-actions">
+              <button class="btn btn-sm btn-outline">
+                <i class="fas fa-ellipsis-h"></i>
+              </button>
+            </div>
+          </div>
+          <div class="stat-value">$12,450.75</div>
+          <div class="stat-label">Disponible</div>
+          <div class="stat-change positive">
+            <i class="fas fa-arrow-up"></i>
+            <span>12% vs mes anterior</span>
+          </div>
+        </div>
+
+        <div class="card stat-card">
+          <div class="card-header">
+            <h3 class="card-title">Ingresos</h3>
+            <div class="card-actions">
+              <button class="btn btn-sm btn-outline">
+                <i class="fas fa-ellipsis-h"></i>
+              </button>
+            </div>
+          </div>
+          <div class="stat-value">$3,850.00</div>
+          <div class="stat-label">Este mes</div>
+          <div class="stat-change positive">
+            <i class="fas fa-arrow-up"></i>
+            <span>8% vs mes anterior</span>
+          </div>
+        </div>
+
+        <div class="card stat-card">
+          <div class="card-header">
+            <h3 class="card-title">Gastos</h3>
+            <div class="card-actions">
+              <button class="btn btn-sm btn-outline">
+                <i class="fas fa-ellipsis-h"></i>
+              </button>
+            </div>
+          </div>
+          <div class="stat-value">$2,450.25</div>
+          <div class="stat-label">Este mes</div>
+          <div class="stat-change negative">
+            <i class="fas fa-arrow-down"></i>
+            <span>5% vs mes anterior</span>
+          </div>
+        </div>
+
+        <div class="card stat-card">
+          <div class="card-header">
+            <h3 class="card-title">Ahorros</h3>
+            <div class="card-actions">
+              <button class="btn btn-sm btn-outline">
+                <i class="fas fa-ellipsis-h"></i>
+              </button>
+            </div>
+          </div>
+          <div class="stat-value">$1,400.50</div>
+          <div class="stat-label">Este mes</div>
+          <div class="stat-change positive">
+            <i class="fas fa-arrow-up"></i>
+            <span>15% vs mes anterior</span>
+          </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="card chart-card">
+          <div class="card-header">
+            <h3 class="card-title">Flujo de Efectivo</h3>
+            <div class="card-actions">
+              <button class="btn btn-sm btn-outline">
+                <i class="fas fa-calendar-alt"></i>
+              </button>
+              <button class="btn btn-sm btn-outline">
+                <i class="fas fa-ellipsis-h"></i>
+              </button>
+            </div>
+          </div>
+          <div class="chart-container">
+            <canvas id="cashFlowChart"></canvas>
+          </div>
+        </div>
+
+        <div class="card chart-card">
+          <div class="card-header">
+            <h3 class="card-title">Distribución de Gastos</h3>
+            <div class="card-actions">
+              <button class="btn btn-sm btn-outline">
+                <i class="fas fa-ellipsis-h"></i>
+              </button>
+            </div>
+          </div>
+          <div class="chart-container">
+            <canvas id="expensesChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Transactions -->
+        <div class="card transactions-card">
+          <div class="card-header">
+            <h3 class="card-title">Últimas Transacciones</h3>
+            <div class="card-actions">
+              <button class="btn btn-sm btn-primary" id="addTransactionBtn">
+                <i class="fas fa-plus"></i>
+                <span>Agregar</span>
+              </button>
+            </div>
+          </div>
+          
+          <div class="transaction">
+            <div class="transaction-info">
+              <div class="transaction-icon income">
+                <i class="fas fa-dollar-sign"></i>
+              </div>
+              <div class="transaction-details">
+                <h4>Salario</h4>
+                <p>15 Jun 2023 • Nómina</p>
+              </div>
+            </div>
+            <div class="transaction-amount positive">+$2,500.00</div>
+          </div>
+          
+          <div class="transaction">
+            <div class="transaction-info">
+              <div class="transaction-icon expense">
+                <i class="fas fa-shopping-cart"></i>
+              </div>
+              <div class="transaction-details">
+                <h4>Supermercado</h4>
+                <p>14 Jun 2023 • Alimentos</p>
+              </div>
+            </div>
+            <div class="transaction-amount negative">-$185.75</div>
+          </div>
+          
+          <div class="transaction">
+            <div class="transaction-info">
+              <div class="transaction-icon expense">
+                <i class="fas fa-home"></i>
+              </div>
+              <div class="transaction-details">
+                <h4>Renta</h4>
+                <p>10 Jun 2023 • Vivienda</p>
+              </div>
+            </div>
+            <div class="transaction-amount negative">-$1,200.00</div>
+          </div>
+          
+          <div class="transaction">
+            <div class="transaction-info">
+              <div class="transaction-icon income">
+                <i class="fas fa-piggy-bank"></i>
+              </div>
+              <div class="transaction-details">
+                <h4>Intereses</h4>
+                <p>5 Jun 2023 • Inversiones</p>
+              </div>
+            </div>
+            <div class="transaction-amount positive">+$45.50</div>
+          </div>
+          
+          <div class="transaction">
+            <div class="transaction-info">
+              <div class="transaction-icon expense">
+                <i class="fas fa-utensils"></i>
+              </div>
+              <div class="transaction-details">
+                <h4>Restaurante</h4>
+                <p>3 Jun 2023 • Entretenimiento</p>
+              </div>
+            </div>
+            <div class="transaction-amount negative">-$65.30</div>
+          </div>
+        </div>
+
+        <!-- Budgets -->
+        <div class="card budgets-card">
+          <div class="card-header">
+            <h3 class="card-title">Presupuestos</h3>
+            <div class="card-actions">
+              <button class="btn btn-sm btn-primary">
+                <i class="fas fa-plus"></i>
+                <span>Nuevo</span>
+              </button>
+            </div>
+          </div>
+          
+          <div class="budget-item">
+            <div class="budget-header">
+              <span class="budget-category">Vivienda</span>
+              <span class="budget-amount">$1,200 / $1,500</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress" style="width: 80%"></div>
+            </div>
+          </div>
+          
+          <div class="budget-item">
+            <div class="budget-header">
+              <span class="budget-category">Alimentos</span>
+              <span class="budget-amount">$450 / $600</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress" style="width: 75%"></div>
+            </div>
+          </div>
+          
+          <div class="budget-item">
+            <div class="budget-header">
+              <span class="budget-category">Transporte</span>
+              <span class="budget-amount">$120 / $200</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress" style="width: 60%"></div>
+            </div>
+          </div>
+          
+          <div class="budget-item">
+            <div class="budget-header">
+              <span class="budget-category">Entretenimiento</span>
+              <span class="budget-amount">$85 / $150</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress" style="width: 57%"></div>
+            </div>
+          </div>
+          
+          <div class="budget-item">
+            <div class="budget-header">
+              <span class="budget-category">Ahorros</span>
+              <span class="budget-amount">$1,400 / $1,000</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress" style="width: 140%"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Additional Charts -->
+        <div class="card chart-card">
+          <div class="card-header">
+            <h3 class="card-title">Tendencias Mensuales</h3>
+            <div class="card-actions">
+              <button class="btn btn-sm btn-outline">
+                <i class="fas fa-ellipsis-h"></i>
+              </button>
+            </div>
+          </div>
+          <div class="chart-container">
+            <canvas id="monthlyTrendsChart"></canvas>
+          </div>
+        </div>
+
+        <div class="card chart-card">
+          <div class="card-header">
+            <h3 class="card-title">Metas de Ahorro</h3>
+            <div class="card-actions">
+              <button class="btn btn-sm btn-outline">
+                <i class="fas fa-ellipsis-h"></i>
+              </button>
+            </div>
+          </div>
+          <div class="chart-container">
+            <canvas id="savingsGoalsChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Add Transaction Modal -->
+  <div class="modal" id="transactionModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Agregar Transacción</h3>
+        <button class="modal-close" id="closeModalBtn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="tabs">
+          <div class="tab active">Gasto</div>
+          <div class="tab">Ingreso</div>
+          <div class="tab">Transferencia</div>
+        </div>
+        
+        <form id="transactionForm">
+          <div class="form-group">
+            <label class="form-label">Categoría</label>
+            <select class="form-control">
+              <option value="">Seleccionar categoría</option>
+              <option value="food">Alimentos</option>
+              <option value="housing">Vivienda</option>
+              <option value="transport">Transporte</option>
+              <option value="entertainment">Entretenimiento</option>
+              <option value="health">Salud</option>
+              <option value="education">Educación</option>
+              <option value="other">Otros</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Descripción</label>
+            <input type="text" class="form-control" placeholder="Ej. Compra en el supermercado">
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Monto</label>
+            <input type="number" class="form-control" placeholder="0.00">
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Fecha</label>
+            <input type="date" class="form-control">
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Cuenta</label>
+            <select class="form-control">
+              <option value="">Seleccionar cuenta</option>
+              <option value="checking">Cuenta Corriente</option>
+              <option value="savings">Cuenta de Ahorros</option>
+              <option value="credit">Tarjeta de Crédito</option>
+              <option value="cash">Efectivo</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline">Cancelar</button>
+        <button class="btn btn-primary">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Initialize Charts
+    document.addEventListener('DOMContentLoaded', function() {
+      // Cash Flow Chart
+      const cashFlowCtx = document.getElementById('cashFlowChart').getContext('2d');
+      const cashFlowChart = new Chart(cashFlowCtx, {
+        type: 'line',
+        data: {
+          labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'],
+          datasets: [
+            {
+              label: 'Ingresos',
+              data: [2500, 2800, 3000, 3200, 3500, 3850],
+              borderColor: '#2e7d32',
+              backgroundColor: 'rgba(46, 125, 50, 0.1)',
+              tension: 0.3,
+              fill: true
+            },
+            {
+              label: 'Gastos',
+              data: [1800, 2000, 2200, 2100, 2300, 2450],
+              borderColor: '#d32f2f',
+              backgroundColor: 'rgba(211, 47, 47, 0.1)',
+              tension: 0.3,
+              fill: true
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'top',
+            },
+            tooltip: {
+              mode: 'index',
+              intersect: false,
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+
+      // Expenses Distribution Chart
+      const expensesCtx = document.getElementById('expensesChart').getContext('2d');
+      const expensesChart = new Chart(expensesCtx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Vivienda', 'Alimentos', 'Transporte', 'Entretenimiento', 'Salud', 'Otros'],
+          datasets: [{
+            data: [1200, 450, 120, 85, 150, 450],
+            backgroundColor: [
+              '#2e7d32',
+              '#81c784',
+              '#a5d6a7',
+              '#ffab00',
+              '#ff7043',
+              '#bdbdbd'
+            ],
+            borderWidth: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'right',
+            },
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  let label = context.label || '';
+                  if (label) {
+                    label += ': ';
+                  }
+                  label += '$' + context.raw;
+                  return label;
+                }
+              }
+            }
+          }
+        }
+      });
+
+      // Monthly Trends Chart
+      const trendsCtx = document.getElementById('monthlyTrendsChart').getContext('2d');
+      const trendsChart = new Chart(trendsCtx, {
+        type: 'bar',
+        data: {
+          labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'],
+          datasets: [{
+            label: 'Balance',
+            data: [700, 800, 800, 1100, 1200, 1400],
+            backgroundColor: '#2e7d32',
+            borderRadius: 4
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+
+      // Savings Goals Chart
+      const savingsCtx = document.getElementById('savingsGoalsChart').getContext('2d');
+      const savingsChart = new Chart(savingsCtx, {
+        type: 'radar',
+        data: {
+          labels: ['Emergencia', 'Vacaciones', 'Automóvil', 'Retiro', 'Educación'],
+          datasets: [{
+            label: 'Meta',
+            data: [10000, 5000, 15000, 30000, 20000],
+            backgroundColor: 'rgba(46, 125, 50, 0.2)',
+            borderColor: '#2e7d32',
+            pointBackgroundColor: '#2e7d32',
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: '#2e7d32'
+          },
+          {
+            label: 'Actual',
+            data: [5000, 2500, 5000, 10000, 8000],
+            backgroundColor: 'rgba(129, 199, 132, 0.2)',
+            borderColor: '#81c784',
+            pointBackgroundColor: '#81c784',
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: '#81c784'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            r: {
+              angleLines: {
+                display: true
+              },
+              suggestedMin: 0,
+              suggestedMax: 30000
+            }
+          }
+        }
+      });
+
+      // Modal functionality
+      const modal = document.getElementById('transactionModal');
+      const addBtn = document.getElementById('addTransactionBtn');
+      const closeBtn = document.getElementById('closeModalBtn');
+
+      addBtn.addEventListener('click', () => {
+        modal.classList.add('active');
+      });
+
+      closeBtn.addEventListener('click', () => {
+        modal.classList.remove('active');
+      });
+
+      window.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          modal.classList.remove('active');
+        }
+      });
+
+      // Date range selector
+      const dateRangeBtns = document.querySelectorAll('.date-range-btn');
+      dateRangeBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          dateRangeBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          // Here you would update the charts/data based on the selected date range
+        });
+      });
+
+      // Tab functionality
+      const tabs = document.querySelectorAll('.tab');
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          tabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+        });
+      });
+    });
+  </script>
+</body>
+</html>
