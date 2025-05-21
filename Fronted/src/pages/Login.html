@@ -221,10 +221,27 @@
             </div>
             
             <button type="submit" class="btn btn-primary">Iniciar sesión</button>
-            <a href="Preferencias.html" class="btn btn-primary">
+            
+            <a href="/Fronted/src/pages/Perfilusser.html" class="btn btn-primary">
                 IA admin
             </a>
         </form>
+        
+        <script>
+            document.getElementById("loginForm").addEventListener("submit", function(event) {
+                event.preventDefault(); // Evita que el formulario se envíe normalmente
+                
+                // Aquí puedes agregar validaciones (ej: verificar email y contraseña)
+                const email = document.getElementById("email").value;
+                const password = document.getElementById("password").value;
+                
+                if (email && password) { // Si los campos no están vacíos
+                    window.location.href = "src/pages/preferenciasusser.html"; // Redirige
+                } else {
+                    alert("Por favor, completa todos los campos.");
+                }
+            });
+        </script>
                 
         <div class="divider">
             <span>o</span>
