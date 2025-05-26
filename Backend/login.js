@@ -10,8 +10,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const password = form.password.value;
 
         // Credenciales predeterminadas
-        const validEmail = "usuario@finanzas.com";
-        const validPassword = "123456";
+        const validEmail = "juan.perez@example.com";
+        const validPassword = "JuanPerez2024"; 
 
         if (email === validEmail && password === validPassword) {
             // Redirigir a la página de preferencias
