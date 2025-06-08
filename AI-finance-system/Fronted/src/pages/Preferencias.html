@@ -1,0 +1,573 @@
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Mis Preferencias - Finanzas IA</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <link rel="stylesheet" href="/Fronted/src/styles/css/Preferencias.css">
+    </head>
+    <body>
+        <div class="dashboard-container">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="logo">
+                    <i class="fas fa-robot"></i>
+                    <h1>Finanzas IA</h1>
+                </div>
+                <div class="user-profile">
+                    <img src="https://ui-avatars.com/api/?name=Juan+Perez" alt="Usuario">
+                    <div class="user-info">
+                        <strong>Juan Pérez</strong>
+                        <small>juan@example.com</small>
+                    </div>
+                    <a href="#" class="logout"><i class="fas fa-sign-out-alt"></i></a>
+                </div>
+            </aside>
+            
+            <!-- Main Content -->
+            <main class="main-content">
+                <header class="content-header">
+                    <h2><i class="fas fa-cog"></i> Mis Preferencias</h2>
+                    <header class="content-header">
+                        <h2><i class="fas fa-cog"></i> Mis Preferencias</h2>
+                        <div class="header-actions">
+                            <button class="btn primary" id="savePreferences">
+                                <i class="fas fa-save"></i> Guardar Cambios
+                            </button>
+                            <!-- Botón siguiente (oculto inicialmente) -->
+                            <button class="btn success" id="nextStepBtn" style="display: none; margin-left: 10px;">
+                                <i class="fas fa-arrow-right"></i> Siguiente Paso
+                            </button>
+                        </div>
+                    </header>
+                </header>
+                
+                <div class="preferences-container">
+                    <!-- Pestañas -->
+                    <div class="tabs">
+                        <button class="tab-btn active" data-tab="profile">Perfil</button>
+                        <button class="tab-btn" data-tab="financial">Datos Financieros</button>
+                        <button class="tab-btn" data-tab="goals">Metas</button>
+                        <button class="tab-btn" data-tab="ia">Preferencias IA</button>
+                    </div>
+                    
+                    <!-- Contenido de las pestañas -->
+                    <div class="tab-content active" id="profile-tab">
+                        <form class="preferences-form">
+                            <h3><i class="fas fa-user"></i> Información Personal</h3>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="fullName">Nombre Completo</label>
+                                    <input type="text" id="fullName" value="Juan Pérez">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="email">Correo Electrónico</label>
+                                    <input type="email" id="email" value="juan@example.com" disabled>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="birthdate">Fecha de Nacimiento</label>
+                                    <input type="date" id="birthdate" value="1985-05-15">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="phone">Teléfono</label>
+                                    <input type="tel" id="phone" value="+1 234 567 890">
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="country">País</label>
+                                    <select id="country">
+                                        <option value="MX">México</option>
+                                        <option value="US" selected>Estados Unidos</option>
+                                        <option value="ES">España</option>
+                                        <option value="CO">Colombia</option>
+                                        <!-- Más opciones... -->
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="city">Ciudad</label>
+                                    <input type="text" id="city" value="Nueva York">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="profession">Profesión</label>
+                                <input type="text" id="profession" placeholder="Ingresa tu profesión" value="Ingeniero de Software">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="avatar">Foto de Perfil</label>
+                                <div class="avatar-upload">
+                                    <img src="https://ui-avatars.com/api/?name=Juan+Perez" alt="Avatar" id="avatar-preview">
+                                    <div class="upload-actions">
+                                        <input type="file" id="avatar" accept="image/*">
+                                        <button type="button" class="btn secondary small" id="uploadBtn">
+                                            <i class="fas fa-upload"></i> Cambiar Foto
+                                        </button>
+                                        <button type="button" class="btn text small" id="removeAvatar">
+                                            <i class="fas fa-trash"></i> Eliminar
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <div class="tab-content" id="financial-tab">
+                        <form class="preferences-form">
+                            <h3><i class="fas fa-wallet"></i> Situación Financiera</h3>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="currency">Moneda Principal</label>
+                                    <select id="currency">
+                                        <option value="USD" selected>Dólar Estadounidense (USD)</option>
+                                        <option value="MXN">Peso Mexicano (MXN)</option>
+                                        <option value="EUR">Euro (EUR)</option>
+                                        <!-- Más opciones... -->
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="income">Ingreso Mensual</label>
+                                    <div class="input-with-symbol">
+                                        <span class="symbol">$</span>
+                                        <input type="number" id="income" placeholder="0.00" value="4500">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Fuentes de Ingreso</label>
+                                <div class="dynamic-list" id="incomeSources">
+                                    <!-- Items dinámicos -->
+                                    <div class="list-item">
+                                        <input type="text" placeholder="Descripción" value="Salario principal">
+                                        <div class="input-with-symbol">
+                                            <span class="symbol">$</span>
+                                            <input type="number" placeholder="Monto" value="3800">
+                                        </div>
+                                        <select>
+                                            <option value="monthly" selected>Mensual</option>
+                                            <option value="weekly">Semanal</option>
+                                            <option value="biweekly">Quincenal</option>
+                                        </select>
+                                        <button type="button" class="btn icon danger"><i class="fas fa-times"></i></button>
+                                    </div>
+                                    <div class="list-item">
+                                        <input type="text" placeholder="Descripción" value="Freelance">
+                                        <div class="input-with-symbol">
+                                            <span class="symbol">$</span>
+                                            <input type="number" placeholder="Monto" value="700">
+                                        </div>
+                                        <select>
+                                            <option value="monthly">Mensual</option>
+                                            <option value="weekly" selected>Semanal</option>
+                                            <option value="biweekly">Quincenal</option>
+                                        </select>
+                                        <button type="button" class="btn icon danger"><i class="fas fa-times"></i></button>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn secondary small" id="addIncomeSource">
+                                    <i class="fas fa-plus"></i> Agregar Fuente
+                                </button>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Gastos Fijos Mensuales</label>
+                                <div class="dynamic-list" id="fixedExpenses">
+                                    <!-- Items dinámicos -->
+                                    <div class="list-item">
+                                        <input type="text" placeholder="Descripción" value="Renta">
+                                        <div class="input-with-symbol">
+                                            <span class="symbol">$</span>
+                                            <input type="number" placeholder="Monto" value="1200">
+                                        </div>
+                                        <button type="button" class="btn icon danger"><i class="fas fa-times"></i></button>
+                                    </div>
+                                    <div class="list-item">
+                                        <input type="text" placeholder="Descripción" value="Servicios">
+                                        <div class="input-with-symbol">
+                                            <span class="symbol">$</span>
+                                            <input type="number" placeholder="Monto" value="350">
+                                        </div>
+                                        <button type="button" class="btn icon danger"><i class="fas fa-times"></i></button>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn secondary small" id="addFixedExpense">
+                                    <i class="fas fa-plus"></i> Agregar Gasto
+                                </button>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Deudas Actuales</label>
+                                <div class="dynamic-list" id="debtsList">
+                                    <!-- Items dinámicos -->
+                                    <div class="list-item">
+                                        <input type="text" placeholder="Acreedor" value="Banco Nacional">
+                                        <div class="input-with-symbol">
+                                            <span class="symbol">$</span>
+                                            <input type="number" placeholder="Monto total" value="15000">
+                                        </div>
+                                        <div class="input-with-symbol">
+                                            <span class="symbol">$</span>
+                                            <input type="number" placeholder="Pago mensual" value="450">
+                                        </div>
+                                        <input type="number" placeholder="Tasa interés %" value="7.5" step="0.1">
+                                        <button type="button" class="btn icon danger"><i class="fas fa-times"></i></button>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn secondary small" id="addDebt">
+                                    <i class="fas fa-plus"></i> Agregar Deuda
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <div class="tab-content" id="goals-tab">
+                        <form class="preferences-form">
+                            <h3><i class="fas fa-bullseye"></i> Mis Metas Financieras</h3>
+                            
+                            <div class="form-group">
+                                <label>Metas a Corto Plazo (1-2 años)</label>
+                                <div class="dynamic-list" id="shortTermGoals">
+                                    <div class="list-item">
+                                        <input type="text" placeholder="Descripción" value="Fondo de emergencia">
+                                        <div class="input-with-symbol">
+                                            <span class="symbol">$</span>
+                                            <input type="number" placeholder="Monto objetivo" value="10000">
+                                        </div>
+                                        <input type="number" placeholder="Monto actual" value="3500">
+                                        <input type="date" placeholder="Fecha objetivo" value="2024-12-31">
+                                        <button type="button" class="btn icon danger"><i class="fas fa-times"></i></button>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn secondary small" id="addShortTermGoal">
+                                    <i class="fas fa-plus"></i> Agregar Meta
+                                </button>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Metas a Mediano Plazo (3-5 años)</label>
+                                <div class="dynamic-list" id="mediumTermGoals">
+                                    <div class="list-item">
+                                        <input type="text" placeholder="Descripción" value="Enganche para casa">
+                                        <div class="input-with-symbol">
+                                            <span class="symbol">$</span>
+                                            <input type="number" placeholder="Monto objetivo" value="50000">
+                                        </div>
+                                        <input type="number" placeholder="Monto actual" value="12000">
+                                        <input type="date" placeholder="Fecha objetivo" value="2026-06-30">
+                                        <button type="button" class="btn icon danger"><i class="fas fa-times"></i></button>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn secondary small" id="addMediumTermGoal">
+                                    <i class="fas fa-plus"></i> Agregar Meta
+                                </button>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Metas a Largo Plazo (5+ años)</label>
+                                <div class="dynamic-list" id="longTermGoals">
+                                    <div class="list-item">
+                                        <input type="text" placeholder="Descripción" value="Jubilación">
+                                        <div class="input-with-symbol">
+                                            <span class="symbol">$</span>
+                                            <input type="number" placeholder="Monto objetivo" value="500000">
+                                        </div>
+                                        <input type="number" placeholder="Monto actual" value="85000">
+                                        <input type="date" placeholder="Fecha objetivo" value="2040-01-01">
+                                        <button type="button" class="btn icon danger"><i class="fas fa-times"></i></button>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn secondary small" id="addLongTermGoal">
+                                    <i class="fas fa-plus"></i> Agregar Meta
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <div class="tab-content" id="ia-tab">
+                        <form class="preferences-form">
+                            <h3><i class="fas fa-robot"></i> Preferencias para la IA</h3>
+                            
+                            <div class="form-group">
+                                <label for="riskTolerance">Tolerancia al Riesgo</label>
+                                <div class="range-labels">
+                                    <span>Conservador</span>
+                                    <span>Moderado</span>
+                                    <span>Agresivo</span>
+                                </div>
+                                <input type="range" id="riskTolerance" min="1" max="3" step="1" value="2">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="timeHorizon">Horizonte Temporal de Inversión</label>
+                                <select id="timeHorizon">
+                                    <option value="short">Corto Plazo (1-3 años)</option>
+                                    <option value="medium" selected>Mediano Plazo (3-7 años)</option>
+                                    <option value="long">Largo Plazo (7+ años)</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Enfoque Principal</label>
+                                <div class="checkbox-grid">
+                                    <label class="checkbox-option">
+                                        <input type="radio" name="focus" value="saving" checked>
+                                        <span class="checkmark"></span>
+                                        Ahorro
+                                    </label>
+                                    <label class="checkbox-option">
+                                        <input type="radio" name="focus" value="investing">
+                                        <span class="checkmark"></span>
+                                        Inversión
+                                    </label>
+                                    <label class="checkbox-option">
+                                        <input type="radio" name="focus" value="debt">
+                                        <span class="checkmark"></span>
+                                        Reducción de Deuda
+                                    </label>
+                                    <label class="checkbox-option">
+                                        <input type="radio" name="focus" value="income">
+                                        <span class="checkmark"></span>
+                                        Aumentar Ingresos
+                                    </label>
+                                    <label class="checkbox-option">
+                                        <input type="radio" name="focus" value="balance">
+                                        <span class="checkmark"></span>
+                                        Balance General
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Áreas de Interés (Selección múltiple)</label>
+                                <div class="checkbox-grid">
+                                    <label class="checkbox-option">
+                                        <input type="checkbox" name="interests" value="technology" checked>
+                                        <span class="checkmark"></span>
+                                        Tecnología
+                                    </label>
+                                    <label class="checkbox-option">
+                                        <input type="checkbox" name="interests" value="real_estate">
+                                        <span class="checkmark"></span>
+                                        Bienes Raíces
+                                    </label>
+                                    <label class="checkbox-option">
+                                        <input type="checkbox" name="interests" value="stocks" checked>
+                                        <span class="checkmark"></span>
+                                        Mercado de Valores
+                                    </label>
+                                    <label class="checkbox-option">
+                                        <input type="checkbox" name="interests" value="crypto">
+                                        <span class="checkmark"></span>
+                                        Criptomonedas
+                                    </label>
+                                    <label class="checkbox-option">
+                                        <input type="checkbox" name="interests" value="funds">
+                                        <span class="checkmark"></span>
+                                        Fondos de Inversión
+                                    </label>
+                                    <label class="checkbox-option">
+                                        <input type="checkbox" name="interests" value="business">
+                                        <span class="checkmark"></span>
+                                        Negocios/Emprendimiento
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="updateFrequency">Frecuencia de Recomendaciones</label>
+                                <select id="updateFrequency">
+                                    <option value="daily">Diariamente</option>
+                                    <option value="weekly" selected>Semanalmente</option>
+                                    <option value="monthly">Mensualmente</option>
+                                    <option value="as_needed">Solo cuando sea importante</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <script>
+            // Funcionalidad de pestañas
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Remover clase active de todos los botones y contenidos
+                    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                    
+                    // Agregar clase active al botón clickeado
+                    btn.classList.add('active');
+                    
+                    // Mostrar el contenido correspondiente
+                    const tabId = btn.getAttribute('data-tab');
+                    document.getElementById(`${tabId}-tab`).classList.add('active');
+                });
+            });
+            
+            // Funcionalidad para agregar elementos dinámicos
+            function setupDynamicList(addButtonId, listId, templateHtml) {
+                const addButton = document.getElementById(addButtonId);
+                const list = document.getElementById(listId);
+                
+                addButton.addEventListener('click', () => {
+                    const newItem = document.createElement('div');
+                    newItem.className = 'list-item';
+                    newItem.innerHTML = templateHtml;
+                    list.appendChild(newItem);
+                    
+                    // Agregar evento al botón de eliminar
+                    newItem.querySelector('.btn.icon.danger').addEventListener('click', () => {
+                        list.removeChild(newItem);
+                    });
+                });
+                
+                // Configurar eventos para elementos existentes
+                list.querySelectorAll('.btn.icon.danger').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        list.removeChild(this.parentElement);
+                    });
+                });
+            }
+            
+            // Configurar listas dinámicas
+            setupDynamicList(
+                'addIncomeSource',
+                'incomeSources',
+                `<input type="text" placeholder="Descripción">
+                <div class="input-with-symbol">
+                    <span class="symbol">$</span>
+                    <input type="number" placeholder="Monto">
+                </div>
+                <select>
+                    <option value="monthly">Mensual</option>
+                    <option value="weekly">Semanal</option>
+                    <option value="biweekly">Quincenal</option>
+                </select>
+                <button type="button" class="btn icon danger"><i class="fas fa-times"></i></button>`
+            );
+            
+            setupDynamicList(
+                'addFixedExpense',
+                'fixedExpenses',
+                `<input type="text" placeholder="Descripción">
+                <div class="input-with-symbol">
+                    <span class="symbol">$</span>
+                    <input type="number" placeholder="Monto">
+                </div>
+                <button type="button" class="btn icon danger"><i class="fas fa-times"></i></button>`
+            );
+            
+            setupDynamicList(
+                'addDebt',
+                'debtsList',
+                `<input type="text" placeholder="Acreedor">
+                <div class="input-with-symbol">
+                    <span class="symbol">$</span>
+                    <input type="number" placeholder="Monto total">
+                </div>
+                <div class="input-with-symbol">
+                    <span class="symbol">$</span>
+                    <input type="number" placeholder="Pago mensual">
+                </div>
+                <input type="number" placeholder="Tasa interés %" step="0.1">
+                <button type="button" class="btn icon danger"><i class="fas fa-times"></i></button>`
+            );
+            
+            setupDynamicList(
+                'addShortTermGoal',
+                'shortTermGoals',
+                `<input type="text" placeholder="Descripción">
+                <div class="input-with-symbol">
+                    <span class="symbol">$</span>
+                    <input type="number" placeholder="Monto objetivo">
+                </div>
+                <input type="number" placeholder="Monto actual">
+                <input type="date" placeholder="Fecha objetivo">
+                <button type="button" class="btn icon danger"><i class="fas fa-times"></i></button>`
+            );
+            
+            setupDynamicList(
+                'addMediumTermGoal',
+                'mediumTermGoals',
+                `<input type="text" placeholder="Descripción">
+                <div class="input-with-symbol">
+                    <span class="symbol">$</span>
+                    <input type="number" placeholder="Monto objetivo">
+                </div>
+                <input type="number" placeholder="Monto actual">
+                <input type="date" placeholder="Fecha objetivo">
+                <button type="button" class="btn icon danger"><i class="fas fa-times"></i></button>`
+            );
+            
+            setupDynamicList(
+                'addLongTermGoal',
+                'longTermGoals',
+                `<input type="text" placeholder="Descripción">
+                <div class="input-with-symbol">
+                    <span class="symbol">$</span>
+                    <input type="number" placeholder="Monto objetivo">
+                </div>
+                <input type="number" placeholder="Monto actual">
+                <input type="date" placeholder="Fecha objetivo">
+                <button type="button" class="btn icon danger"><i class="fas fa-times"></i></button>`
+            );
+            
+            // Funcionalidad para subir avatar
+            document.getElementById('uploadBtn').addEventListener('click', () => {
+                document.getElementById('avatar').click();
+            });
+            
+            document.getElementById('avatar').addEventListener('change', function(e) {
+                if (e.target.files && e.target.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        document.getElementById('avatar-preview').src = event.target.result;
+                    };
+                    reader.readAsDataURL(e.target.files[0]);
+                }
+            });
+            
+            document.getElementById('removeAvatar').addEventListener('click', () => {
+                document.getElementById('avatar-preview').src = 'https://ui-avatars.com/api/?name=Usuario';
+                document.getElementById('avatar').value = '';
+            });
+            
+            // Guardar preferencias
+            document.getElementById('savePreferences').addEventListener('click', function() {
+                // Aquí iría la lógica para guardar las preferencias
+                alert('Preferencias guardadas correctamente');
+                // Normalmente harías una llamada AJAX para guardar los datos
+            });
+            // Guardar preferencias
+    document.getElementById('savePreferences').addEventListener('click', function() {
+        // Simular guardado exitoso (reemplazar con tu lógica real)
+        setTimeout(() => {
+            alert('Preferencias guardadas correctamente');
+            
+            // Mostrar botón "Siguiente Paso"
+            document.getElementById('nextStepBtn').style.display = 'inline-block';
+        }, 1000); // Retraso simulado para efecto de guardado
+    });
+
+    // Redirigir al hacer clic en "Siguiente Paso"
+    document.getElementById('nextStepBtn').addEventListener('click', function() {
+        window.location.href = 'Homepage.html'; // Cambia la ruta si es necesario
+    });
+        </script>
+    </body>
+    </html>

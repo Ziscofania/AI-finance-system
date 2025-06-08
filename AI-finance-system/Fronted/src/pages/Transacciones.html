@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <title>Transacciones - Finanzas360</title>
+  <style>
+    :root {
+      --primary-color: #2e7d32;
+      --secondary-color: #81c784;
+      --accent-color: #ffab00;
+      --danger-color: #d32f2f;
+      --light-bg: #f5f5f5;
+      --card-bg: #ffffff;
+      --text-dark: #263238;
+      --text-medium: #546e7a;
+      --text-light: #b0bec5;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--light-bg);
+      color: var(--text-dark);
+      line-height: 1.6;
+    }
+    
+    .container {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      min-height: 100vh;
+    }
+    
+    /* Sidebar */
+    .sidebar {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 2rem 1rem;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 2.5rem;
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+    
+    .logo i {
+      font-size: 1.5rem;
+    }
+    
+    .nav-menu {
+      list-style: none;
+    }
+    
+    .nav-item {
+      margin-bottom: 0.75rem;
+    }
+    
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+    
+    .nav-link:hover, .nav-link.active {
+      background-color: rgba(255, 255, 255, 0.15);
+    }
+    
+    /* Main Content */
+    .main-content {
+      padding: 2rem;
+      overflow-y: auto;
+      max-height: 100vh;
+    }
+    
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+    
+    .page-title {
+      font-size: 1.75rem;
+      font-weight: 600;
+    }
+    
+    .user-menu {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    /* Dashboard Grid */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 1.5rem;
+    }
+    
+    .card {
+      background-color: var(--card-bg);
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+    }
+    
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+    
+    /* Botones */
+    .btn {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 6px;
+      font-family: inherit;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .btn-primary {
+      background-color: var(--primary-color);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background-color: #1b5e20;
+    }
+    
+    .btn-outline {
+      background-color: transparent;
+      border: 1px solid var(--text-light);
+      color: var(--text-medium);
+    }
+    
+    /* Tabla de transacciones */
+    .transactions-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    
+    .transactions-table th {
+      text-align: left;
+      padding: 0.75rem;
+      color: var(--text-medium);
+      font-weight: 500;
+      border-bottom: 2px solid #eee;
+    }
+    
+    .transactions-table td {
+      padding: 1rem 0.75rem;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .transaction-type {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    
+    .transaction-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+    }
+    
+    .income {
+      background-color: var(--primary-color);
+    }
+    
+    .expense {
+      background-color: var(--danger-color);
+    }
+    
+    .transaction-category {
+      font-weight: 500;
+    }
+    
+    .transaction-date {
+      color: var(--text-medium);
+      font-size: 0.85rem;
+    }
+    
+    .transaction-amount {
+      font-weight: 600;
+    }
+    
+    .income-amount {
+      color: var(--primary-color);
+    }
+    
+    .expense-amount {
+      color: var(--danger-color);
+    }
+    
+    .transaction-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+    
+    .action-btn {
+      background: none;
+      border: none;
+      color: var(--text-medium);
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+    
+    .action-btn:hover {
+      color: var(--primary-color);
+    }
+    
+    /* Filtros */
+    .filters-container {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+    }
+    
+    .search-filter {
+      display: flex;
+      gap: 1rem;
+    }
+    
+    .search-input {
+      padding: 0.5rem 1rem;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      min-width: 250px;
+    }
+    
+    .date-filter {
+      display: flex;
+      gap: 0.5rem;
+    }
+    
+    /* Modal */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    
+    .modal.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+    
+    .modal-content {
+      background-color: white;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 500px;
+      max-height: 90vh;
+      overflow-y: auto;
+      transform: translateY(20px);
+      transition: transform 0.3s ease;
+    }
+    
+    .modal.active .modal-content {
+      transform: translateY(0);
+    }
+    
+    .modal-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .modal-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+    
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--text-medium);
+    }
+    
+    .modal-body {
+      padding: 1.5rem;
+    }
+    
+    .modal-footer {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid #eee;
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.75rem;
+    }
+    
+    /* Formulario */
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+    
+    .form-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+    
+    .form-control {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-family: inherit;
+      transition: border 0.3s ease;
+    }
+    
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary-color);
+    }
+    
+    .form-select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23546e7a' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      background-size: 16px;
+    }
+    
+    /* Responsive */
+    @media (max-width: 1200px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+      
+      .sidebar {
+        display: none;
+      }
+      
+      .filters-container {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      .search-filter {
+        width: 100%;
+      }
+      
+      .search-input {
+        min-width: auto;
+        flex-grow: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar">
+      <div class="logo">
+        <i class="fas fa-chart-line"></i>
+        <span>Finanzas360</span>
+      </div>
+      <ul class="nav-menu">
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fas fa-home"></i>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link active">
+            <i class="fas fa-exchange-alt"></i>
+            <span>Transacciones</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fas fa-chart-pie"></i>
+            <span>Presupuestos</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fas fa-chart-bar"></i>
+            <span>Reportes</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fas fa-bell"></i>
+            <span>Alertas</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fas fa-cog"></i>
+            <span>Ajustes</span>
+          </a>
+        </li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <div class="header">
+        <h1 class="page-title">Transacciones</h1>
+        <div class="user-menu">
+          <button class="btn btn-primary" id="btn-add-transaction">
+            <i class="fas fa-plus"></i> Nueva Transacción
+          </button>
+          <div class="user-avatar">JD</div>
+        </div>
+      </div>
+
+      <!-- Filtros -->
+      <div class="filters-container">
+        <div class="search-filter">
+          <input type="text" class="search-input" placeholder="Buscar transacciones...">
+          <select class="form-control form-select" style="width: 180px;">
+            <option value="">Todas las categorías</option>
+            <option value="food">Comida</option>
+            <option value="transport">Transporte</option>
+            <option value="housing">Vivienda</option>
+            <option value="entertainment">Entretenimiento</option>
+          </select>
+        </div>
+        <div class="date-filter">
+          <button class="btn btn-outline">Hoy</button>
+          <button class="btn btn-outline">Esta semana</button>
+          <button class="btn btn-outline">Este mes</button>
+          <button class="btn btn-outline">Personalizado</button>
+        </div>
+      </div>
+
+      <!-- Tabla de transacciones -->
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Historial de Transacciones</h3>
+          <div>
+            <span style="margin-right: 1rem; color: var(--text-medium);">Total: 24 transacciones</span>
+            <select class="form-control form-select" style="width: 120px; display: inline-block;">
+              <option value="10">10 por página</option>
+              <option value="25">25 por página</option>
+              <option value="50">50 por página</option>
+            </select>
+          </div>
+        </div>
+        
+        <table class="transactions-table">
+          <thead>
+            <tr>
+              <th>Tipo</th>
+              <th>Descripción</th>
+              <th>Categoría</th>
+              <th>Fecha</th>
+              <th>Monto</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div class="transaction-type">
+                  <div class="transaction-icon income">
+                    <i class="fas fa-arrow-down"></i>
+                  </div>
+                  <span>Ingreso</span>
+                </div>
+              </td>
+              <td>
+                <div class="transaction-description">Salario mensual</div>
+              </td>
+              <td>
+                <div class="transaction-category">Salario</div>
+              </td>
+              <td>
+                <div class="transaction-date">05/05/2025</div>
+              </td>
+              <td>
+                <div class="transaction-amount income-amount">+$3,000.00</div>
+              </td>
+              <td>
+                <div class="transaction-actions">
+                  <button class="action-btn" title="Editar">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button class="action-btn" title="Eliminar">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="transaction-type">
+                  <div class="transaction-icon expense">
+                    <i class="fas fa-arrow-up"></i>
+                  </div>
+                  <span>Gasto</span>
+                </div>
+              </td>
+              <td>
+                <div class="transaction-description">Pago de alquiler</div>
+              </td>
+              <td>
+                <div class="transaction-category">Vivienda</div>
+              </td>
+              <td>
+                <div class="transaction-date">01/05/2025</div>
+              </td>
+              <td>
+                <div class="transaction-amount expense-amount">-$800.00</div>
+              </td>
+              <td>
+                <div class="transaction-actions">
+                  <button class="action-btn" title="Editar">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button class="action-btn" title="Eliminar">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            <!-- Más filas de ejemplo -->
+            <tr>
+              <td>
+                <div class="transaction-type">
+                  <div class="transaction-icon expense">
+                    <i class="fas fa-utensils"></i>
+                  </div>
+                  <span>Gasto</span>
+                </div>
+              </td>
+              <td>
+                <div class="transaction-description">Supermercado</div>
+              </td>
+              <td>
+                <div class="transaction-category">Comida</div>
+              </td>
+              <td>
+                <div class="transaction-date">03/05/2025</div>
+              </td>
+              <td>
+                <div class="transaction-amount expense-amount">-$150.75</div>
+              </td>
+              <td>
+                <div class="transaction-actions">
+                  <button class="action-btn" title="Editar">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button class="action-btn" title="Eliminar">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="transaction-type">
+                  <div class="transaction-icon income">
+                    <i class="fas fa-hand-holding-usd"></i>
+                  </div>
+                  <span>Ingreso</span>
+                </div>
+              </td>
+              <td>
+                <div class="transaction-description">Trabajo freelance</div>
+              </td>
+              <td>
+                <div class="transaction-category">Ingresos extra</div>
+              </td>
+              <td>
+                <div class="transaction-date">28/04/2025</div>
+              </td>
+              <td>
+                <div class="transaction-amount income-amount">+$450.00</div>
+              </td>
+              <td>
+                <div class="transaction-actions">
+                  <button class="action-btn" title="Editar">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button class="action-btn" title="Eliminar">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        
+        <!-- Paginación -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid #eee;">
+          <div style="color: var(--text-medium);">
+            Mostrando 1-4 de 24 transacciones
+          </div>
+          <div style="display: flex; gap: 0.5rem;">
+            <button class="btn btn-outline" disabled>
+              <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="btn btn-outline active">1</button>
+            <button class="btn btn-outline">2</button>
+            <button class="btn btn-outline">3</button>
+            <button class="btn btn-outline">
+              <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal para agregar/editar transacción -->
+  <div class="modal" id="transaction-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modal-title">Agregar Transacción</h3>
+        <button class="modal-close" id="btn-close-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="transaction-form">
+          <div class="form-group">
+            <label class="form-label">Tipo de Transacción</label>
+            <div style="display: flex; gap: 1rem;">
+              <label style="flex: 1;">
+                <input type="radio" name="transaction-type" value="income" checked style="margin-right: 0.5rem;">
+                <span>Ingreso</span>
+              </label>
+              <label style="flex: 1;">
+                <input type="radio" name="transaction-type" value="expense" style="margin-right: 0.5rem;">
+                <span>Gasto</span>
+              </label>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Descripción</label>
+            <input type="text" class="form-control" placeholder="Ej. Salario, Pago de alquiler" required>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Categoría</label>
+            <select class="form-control form-select" required>
+              <option value="">Seleccionar categoría</option>
+              <option value="salary">Salario</option>
+              <option value="freelance">Freelance</option>
+              <option value="rent">Alquiler</option>
+              <option value="food">Comida</option>
+              <option value="transport">Transporte</option>
+              <option value="entertainment">Entretenimiento</option>
+              <option value="other">Otro</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Monto</label>
+            <input type="number" class="form-control" placeholder="0.00" step="0.01" min="0" required>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Fecha</label>
+            <input type="date" class="form-control" required>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Notas (Opcional)</label>
+            <textarea class="form-control" rows="3" placeholder="Agregar detalles adicionales"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" id="btn-cancel">Cancelar</button>
+        <button class="btn btn-primary" id="btn-save">Guardar Transacción</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Manejo del modal
+    const modal = document.getElementById('transaction-modal');
+    const openModalBtn = document.getElementById('btn-add-transaction');
+    const closeModalBtn = document.getElementById('btn-close-modal');
+    const cancelBtn = document.getElementById('btn-cancel');
+    const saveBtn = document.getElementById('btn-save');
+    const form = document.getElementById('transaction-form');
+
+    // Abrir modal
+    openModalBtn.addEventListener('click', () => {
+      modal.classList.add('active');
+      document.getElementById('modal-title').textContent = 'Agregar Transacción';
+      form.reset();
+    });
+
+    // Cerrar modal
+    function closeModal() {
+      modal.classList.remove('active');
+    }
+
+    closeModalBtn.addEventListener('click', closeModal);
+    cancelBtn.addEventListener('click', closeModal);
+
+    // Cerrar al hacer clic fuera del modal
+    window.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        closeModal();
+      }
+    });
+
+    // Guardar transacción
+    saveBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      
+      // Validar formulario
+      if (form.checkValidity()) {
+        // Aquí iría la lógica para guardar la transacción
+        alert('Transacción guardada correctamente');
+        closeModal();
+        
+        // En una aplicación real, aquí actualizarías la tabla
+        // con los nuevos datos (posiblemente mediante AJAX)
+      } else {
+        form.reportValidity();
+      }
+    });
+
+    // Ejemplo: Manejar edición de transacción
+    document.querySelectorAll('.action-btn .fa-edit').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const row = this.closest('tr');
+        // Aquí obtendrías los datos de la fila para editar
+        document.getElementById('modal-title').textContent = 'Editar Transacción';
+        
+        // Simulación: Rellenar formulario con datos existentes
+        const type = row.querySelector('.transaction-icon').classList.contains('income') ? 'income' : 'expense';
+        document.querySelector(`input[name="transaction-type"][value="${type}"]`).checked = true;
+        
+        modal.classList.add('active');
+      });
+    });
+
+    // Ejemplo: Manejar eliminación de transacción
+    document.querySelectorAll('.action-btn .fa-trash').forEach(btn => {
+      btn.addEventListener('click', function() {
+        if (confirm('¿Estás seguro de eliminar esta transacción?')) {
+          // Aquí iría la lógica para eliminar la transacción
+          this.closest('tr').remove();
+          alert('Transacción eliminada');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

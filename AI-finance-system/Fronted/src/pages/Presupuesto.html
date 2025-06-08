@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Presupuestos - Finanzas360</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #2e7d32;
+      --secondary-color: #81c784;
+      --accent-color: #ffab00;
+      --danger-color: #d32f2f;
+      --light-bg: #f5f5f5;
+      --card-bg: #ffffff;
+      --text-dark: #263238;
+      --text-medium: #546e7a;
+      --text-light: #b0bec5;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--light-bg);
+      color: var(--text-dark);
+      line-height: 1.6;
+    }
+    
+    .container {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      min-height: 100vh;
+    }
+    
+    /* Sidebar */
+    .sidebar {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 2rem 1rem;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 2.5rem;
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+    
+    .logo i {
+      font-size: 1.5rem;
+    }
+    
+    .nav-menu {
+      list-style: none;
+    }
+    
+    .nav-item {
+      margin-bottom: 0.75rem;
+    }
+    
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+    
+    .nav-link:hover, .nav-link.active {
+      background-color: rgba(255, 255, 255, 0.15);
+    }
+    
+    .nav-link i {
+      width: 24px;
+      text-align: center;
+    }
+    
+    /* Main Content */
+    .main-content {
+      padding: 2rem;
+    }
+    
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+    
+    .page-title {
+      font-size: 1.75rem;
+      font-weight: 600;
+    }
+    
+    .user-menu {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: var(--secondary-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+    }
+    
+    /* Dashboard Grid */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 1.5rem;
+    }
+    
+    .card {
+      background-color: var(--card-bg);
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+    }
+    
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--text-medium);
+    }
+    
+    .card-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+    
+    .btn {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 6px;
+      font-family: inherit;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .btn-sm {
+      padding: 0.35rem 0.75rem;
+      font-size: 0.85rem;
+    }
+    
+    .btn-primary {
+      background-color: var(--primary-color);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background-color: #1b5e20;
+    }
+    
+    .btn-outline {
+      background-color: transparent;
+      border: 1px solid var(--text-light);
+      color: var(--text-medium);
+    }
+    
+    .btn-outline:hover {
+      border-color: var(--text-medium);
+    }
+    
+    .btn-danger {
+      background-color: var(--danger-color);
+      color: white;
+    }
+    
+    .btn-danger:hover {
+      background-color: #b71c1c;
+    }
+    
+    /* Stats Cards */
+    .stat-card {
+      grid-column: span 3;
+    }
+    
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    
+    .stat-label {
+      color: var(--text-medium);
+      font-size: 0.9rem;
+    }
+    
+    .stat-change {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      font-size: 0.85rem;
+      margin-top: 0.5rem;
+    }
+    
+    .positive {
+      color: var(--primary-color);
+    }
+    
+    .negative {
+      color: var(--danger-color);
+    }
+    
+    /* Charts */
+    .chart-card {
+      grid-column: span 6;
+      height: 350px;
+    }
+    
+    .chart-container {
+      position: relative;
+      height: calc(100% - 40px);
+      width: 100%;
+    }
+    
+    /* Transactions */
+    .transactions-card {
+      grid-column: span 4;
+    }
+    
+    .transaction {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .transaction:last-child {
+      border-bottom: none;
+    }
+    
+    .transaction-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .transaction-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+    }
+    
+    .income {
+      background-color: var(--primary-color);
+    }
+    
+    .expense {
+      background-color: var(--danger-color);
+    }
+    
+    .transaction-details h4 {
+      font-size: 0.95rem;
+      margin-bottom: 0.25rem;
+    }
+    
+    .transaction-details p {
+      font-size: 0.8rem;
+      color: var(--text-medium);
+    }
+    
+    .transaction-amount {
+      font-weight: 500;
+    }
+    
+    /* Budgets */
+    .budgets-card {
+      grid-column: span 12;
+    }
+    
+    .budget-item {
+      margin-bottom: 1.5rem;
+      padding: 1rem;
+      border-radius: 8px;
+      background-color: #f9f9f9;
+      transition: all 0.3s ease;
+    }
+    
+    .budget-item:hover {
+      background-color: #f0f0f0;
+    }
+    
+    .budget-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+      align-items: center;
+    }
+    
+    .budget-category {
+      font-weight: 500;
+      font-size: 1.1rem;
+    }
+    
+    .budget-amount {
+      color: var(--text-medium);
+      font-size: 0.9rem;
+    }
+    
+    .budget-used {
+      font-weight: 600;
+    }
+    
+    .budget-total {
+      color: var(--text-medium);
+    }
+    
+    .progress-bar {
+      height: 8px;
+      background-color: #e0e0e0;
+      border-radius: 4px;
+      overflow: hidden;
+      margin: 0.5rem 0;
+    }
+    
+    .progress {
+      height: 100%;
+      background-color: var(--primary-color);
+      border-radius: 4px;
+      transition: width 0.5s ease;
+    }
+    
+    .progress-warning {
+      background-color: var(--accent-color);
+    }
+    
+    .progress-danger {
+      background-color: var(--danger-color);
+    }
+    
+    .budget-footer {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      color: var(--text-medium);
+    }
+    
+    .budget-period {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .budget-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+    
+    /* Budget Categories */
+    .budget-categories {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .budget-category-tag {
+      padding: 0.35rem 0.75rem;
+      background-color: #e8f5e9;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      color: var(--primary-color);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .budget-category-tag:hover, .budget-category-tag.active {
+      background-color: var(--primary-color);
+      color: white;
+    }
+    
+    /* Budget Summary */
+    .budget-summary {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    
+    .summary-card {
+      padding: 1rem;
+      border-radius: 8px;
+      background-color: white;
+      box-shadow: var(--shadow);
+    }
+    
+    .summary-card-title {
+      font-size: 0.85rem;
+      color: var(--text-medium);
+      margin-bottom: 0.5rem;
+    }
+    
+    .summary-card-value {
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+    
+    /* Budget Table */
+    .budget-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    
+    .budget-table th, .budget-table td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .budget-table th {
+      font-weight: 500;
+      color: var(--text-medium);
+      font-size: 0.9rem;
+    }
+    
+    .budget-table tr:last-child td {
+      border-bottom: none;
+    }
+    
+    .budget-table tr:hover td {
+      background-color: #f9f9f9;
+    }
+    
+    /* Responsive */
+    @media (max-width: 1200px) {
+      .stat-card {
+        grid-column: span 6;
+      }
+      
+      .chart-card {
+        grid-column: span 12;
+      }
+      
+      .transactions-card, .budgets-card {
+        grid-column: span 6;
+      }
+      
+      .budget-summary {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+      
+      .sidebar {
+        display: none;
+      }
+      
+      .stat-card, .transactions-card, .budgets-card {
+        grid-column: span 12;
+      }
+      
+      .budget-summary {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    /* Form Styles */
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    
+    .form-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: var(--text-medium);
+    }
+    
+    .form-control {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-family: inherit;
+      transition: border 0.3s ease;
+    }
+    
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary-color);
+    }
+    
+    .form-select {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-family: inherit;
+      background-color: white;
+      cursor: pointer;
+    }
+    
+    /* Modal */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    
+    .modal.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+    
+    .modal-content {
+      background-color: white;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 500px;
+      max-height: 90vh;
+      overflow-y: auto;
+      transform: translateY(20px);
+      transition: transform 0.3s ease;
+    }
+    
+    .modal.active .modal-content {
+      transform: translateY(0);
+    }
+    
+    .modal-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .modal-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+    
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--text-medium);
+    }
+    
+    .modal-body {
+      padding: 1.5rem;
+    }
+    
+    .modal-footer {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid #eee;
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.75rem;
+    }
+    
+    /* Tabs */
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid #eee;
+      margin-bottom: 1.5rem;
+    }
+    
+    .tab {
+      padding: 0.75rem 1.5rem;
+      cursor: pointer;
+      color: var(--text-medium);
+      font-weight: 500;
+      border-bottom: 2px solid transparent;
+      transition: all 0.3s ease;
+    }
+    
+    .tab.active {
+      color: var(--primary-color);
+      border-bottom-color: var(--primary-color);
+    }
+    
+    /* Date Range Selector */
+    .date-range-selector {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .date-range-btn {
+      padding: 0.5rem 1rem;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      background: none;
+      cursor: pointer;
+      color: var(--text-medium);
+      transition: all 0.3s ease;
+    }
+    
+    .date-range-btn.active {
+      background-color: var(--primary-color);
+      color: white;
+      border-color: var(--primary-color);
+    }
+    
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 3rem 0;
+      color: var(--text-medium);
+    }
+    
+    .empty-state i {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: var(--text-light);
+    }
+    
+    .empty-state h3 {
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .empty-state p {
+      margin-bottom: 1.5rem;
+    }
+    
+    /* Tooltip */
+    .tooltip {
+      position: relative;
+      display: inline-block;
+    }
+    
+    .tooltip .tooltip-text {
+      visibility: hidden;
+      width: 200px;
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 0.5rem;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      font-size: 0.8rem;
+    }
+    
+    .tooltip:hover .tooltip-text {
+      visibility: visible;
+      opacity: 1;
+    }
+    
+    /* Badges */
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+    
+    .badge-success {
+      background-color: #e8f5e9;
+      color: var(--primary-color);
+    }
+    
+    .badge-warning {
+      background-color: #fff8e1;
+      color: #ff8f00;
+    }
+    
+    .badge-danger {
+      background-color: #ffebee;
+      color: var(--danger-color);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar">
+      <div class="logo">
+        <i class="fas fa-chart-pie"></i>
+        <span>Finanzas360</span>
+      </div>
+      <ul class="nav-menu">
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fas fa-home"></i>
+            <span>Inicio</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fas fa-wallet"></i>
+            <span>Transacciones</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link active">
+            <i class="fas fa-chart-line"></i>
+            <span>Presupuestos</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fas fa-piggy-bank"></i>
+            <span>Ahorros</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fas fa-chart-pie"></i>
+            <span>Reportes</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fas fa-cog"></i>
+            <span>Configuración</span>
+          </a>
+        </li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <div class="header">
+        <h1 class="page-title">Gestión de Presupuestos</h1>
+        <div class="user-menu">
+          <div class="user-avatar">JD</div>
+        </div>
+      </div>
+
+      <div class="dashboard-grid">
+        <!-- Resumen de Presupuestos -->
+        <div class="card budget-summary">
+          <div class="summary-card">
+            <div class="summary-card-title">Presupuesto Total</div>
+            <div class="summary-card-value">$3,500</div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-card-title">Gastado</div>
+            <div class="summary-card-value">$2,100</div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-card-title">Restante</div>
+            <div class="summary-card-value">$1,400</div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-card-title">Porcentaje Usado</div>
+            <div class="summary-card-value">60%</div>
+          </div>
+        </div>
+
+        <!-- Filtros y Acciones -->
+        <div class="card" style="grid-column: span 12">
+          <div class="card-header">
+            <div class="date-range-selector">
+              <button class="date-range-btn active">Este Mes</button>
+              <button class="date-range-btn">Trimestre</button>
+              <button class="date-range-btn">Año</button>
+              <button class="date-range-btn">
+                <i class="fas fa-calendar-alt"></i> Personalizado
+              </button>
+            </div>
+            <button class="btn btn-primary" id="newBudgetBtn">
+              <i class="fas fa-plus"></i> Nuevo Presupuesto
+            </button>
+          </div>
+          
+          <div class="budget-categories">
+            <span class="budget-category-tag active">Todos</span>
+            <span class="budget-category-tag">Hogar</span>
+            <span class="budget-category-tag">Transporte</span>
+            <span class="budget-category-tag">Alimentación</span>
+            <span class="budget-category-tag">Entretenimiento</span>
+            <span class="budget-category-tag">Salud</span>
+            <span class="budget-category-tag">Educación</span>
+          </div>
+        </div>
+
+        <!-- Lista de Presupuestos -->
+        <div class="card budgets-card">
+          <div class="card-header">
+            <h3 class="card-title">Mis Presupuestos</h3>
+            <div class="card-actions">
+              <button class="btn btn-outline">
+                <i class="fas fa-download"></i> Exportar
+              </button>
+              <button class="btn btn-outline">
+                <i class="fas fa-filter"></i> Filtros
+              </button>
+            </div>
+          </div>
+          
+          <!-- Presupuesto 1 -->
+          <div class="budget-item">
+            <div class="budget-header">
+              <span class="budget-category">Alimentos</span>
+              <span class="budget-amount">
+                <span class="budget-used">$450</span> / 
+                <span class="budget-total">$600</span>
+              </span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress" style="width: 75%"></div>
+            </div>
+            <div class="budget-footer">
+              <div class="budget-period">
+                <i class="far fa-calendar-alt"></i>
+                <span>01/05/2023 - 31/05/2023</span>
+              </div>
+              <div class="budget-actions">
+                <button class="btn btn-sm btn-outline">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn btn-sm btn-outline">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Presupuesto 2 -->
+          <div class="budget-item">
+            <div class="budget-header">
+              <span class="budget-category">Transporte</span>
+              <span class="budget-amount">
+                <span class="budget-used">$280</span> / 
+                <span class="budget-total">$300</span>
+              </span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress progress-warning" style="width: 93%"></div>
+            </div>
+            <div class="budget-footer">
+              <div class="budget-period">
+                <i class="far fa-calendar-alt"></i>
+                <span>01/05/2023 - 31/05/2023</span>
+              </div>
+              <div class="budget-actions">
+                <button class="btn btn-sm btn-outline">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn btn-sm btn-outline">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Presupuesto 3 -->
+          <div class="budget-item">
+            <div class="budget-header">
+              <span class="budget-category">Entretenimiento</span>
+              <span class="budget-amount">
+                <span class="budget-used">$320</span> / 
+                <span class="budget-total">$250</span>
+              </span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress progress-danger" style="width: 128%"></div>
+            </div>
+            <div class="budget-footer">
+              <div class="budget-period">
+                <i class="far fa-calendar-alt"></i>
+                <span>01/05/2023 - 31/05/2023</span>
+              </div>
+              <div class="budget-actions">
+                <button class="btn btn-sm btn-outline">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn btn-sm btn-outline">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Presupuesto 4 -->
+          <div class="budget-item">
+            <div class="budget-header">
+              <span class="budget-category">Hogar</span>
+              <span class="budget-amount">
+                <span class="budget-used">$750</span> / 
+                <span class="budget-total">$1,000</span>
+              </span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress" style="width: 75%"></div>
+            </div>
+            <div class="budget-footer">
+              <div class="budget-period">
+                <i class="far fa-calendar-alt"></i>
+                <span>01/05/2023 - 31/05/2023</span>
+              </div>
+              <div class="budget-actions">
+                <button class="btn btn-sm btn-outline">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn btn-sm btn-outline">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Presupuesto 5 -->
+          <div class="budget-item">
+            <div class="budget-header">
+              <span class="budget-category">Salud</span>
+              <span class="budget-amount">
+                <span class="budget-used">$300</span> / 
+                <span class="budget-total">$500</span>
+              </span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress" style="width: 60%"></div>
+            </div>
+            <div class="budget-footer">
+              <div class="budget-period">
+                <i class="far fa-calendar-alt"></i>
+                <span>01/05/2023 - 31/05/2023</span>
+              </div>
+              <div class="budget-actions">
+                <button class="btn btn-sm btn-outline">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn btn-sm btn-outline">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Gráfico de Presupuestos -->
+        <div class="card chart-card" style="grid-column: span 8">
+          <div class="card-header">
+            <h3 class="card-title">Distribución de Presupuestos</h3>
+            <div class="card-actions">
+              <button class="btn btn-sm btn-outline">
+                <i class="fas fa-expand"></i>
+              </button>
+            </div>
+          </div>
+          <div class="chart-container">
+            <!-- Aquí iría el gráfico (usando Chart.js o similar) -->
+            <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background-color: #f9f9f9; border-radius: 8px;">
+              <i class="fas fa-chart-pie" style="font-size: 3rem; color: var(--text-light);"></i>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Historial de Gastos -->
+        <div class="card" style="grid-column: span 4">
+          <div class="card-header">
+            <h3 class="card-title">Gastos Recientes</h3>
+            <button class="btn btn-sm btn-outline">
+              <i class="fas fa-ellipsis-h"></i>
+            </button>
+          </div>
+          
+          <div class="transaction">
+            <div class="transaction-info">
+              <div class="transaction-icon expense">
+                <i class="fas fa-utensils"></i>
+              </div>
+              <div class="transaction-details">
+                <h4>Supermercado</h4>
+                <p>Alimentos • 15/05/2023</p>
+              </div>
+            </div>
+            <div class="transaction-amount">-$85.50</div>
+          </div>
+          
+          <div class="transaction">
+            <div class="transaction-info">
+              <div class="transaction-icon expense">
+                <i class="fas fa-gas-pump"></i>
+              </div>
+              <div class="transaction-details">
+                <h4>Gasolina</h4>
+                <p>Transporte • 14/05/2023</p>
+              </div>
+            </div>
+            <div class="transaction-amount">-$45.00</div>
+          </div>
+          
+          <div class="transaction">
+            <div class="transaction-info">
+              <div class="transaction-icon expense">
+                <i class="fas fa-film"></i>
+              </div>
+              <div class="transaction-details">
+                <h4>Cine</h4>
+                <p>Entretenimiento • 13/05/2023</p>
+              </div>
+            </div>
+            <div class="transaction-amount">-$28.00</div>
+          </div>
+          
+          <div class="transaction">
+            <div class="transaction-info">
+              <div class="transaction-icon expense">
+                <i class="fas fa-lightbulb"></i>
+              </div>
+              <div class="transaction-details">
+                <h4>Luz</h4>
+                <p>Hogar • 10/05/2023</p>
+              </div>
+            </div>
+            <div class="transaction-amount">-$120.00</div>
+          </div>
+          
+          <div class="transaction">
+            <div class="transaction-info">
+              <div class="transaction-icon expense">
+                <i class="fas fa-briefcase-medical"></i>
+              </div>
+              <div class="transaction-details">
+                <h4>Médico</h4>
+                <p>Salud • 08/05/2023</p>
+              </div>
+            </div>
+            <div class="transaction-amount">-$75.00</div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal para nuevo presupuesto -->
+  <div class="modal" id="newBudgetModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Nuevo Presupuesto</h3>
+        <button class="modal-close" id="closeModalBtn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="budgetForm">
+          <div class="form-group">
+            <label for="budgetCategory" class="form-label">Categoría</label>
+            <select id="budgetCategory" class="form-select" required>
+              <option value="">Seleccione una categoría</option>
+              <option value="alimentos">Alimentos</option>
+              <option value="transporte">Transporte</option>
+              <option value="hogar">Hogar</option>
+              <option value="entretenimiento">Entretenimiento</option>
+              <option value="salud">Salud</option>
+              <option value="educacion">Educación</option>
+              <option value="otros">Otros</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="budgetAmount" class="form-label">Monto del Presupuesto</label>
+            <input type="number" id="budgetAmount" class="form-control" placeholder="Ej: 500" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="budgetPeriod" class="form-label">Período</label>
+            <select id="budgetPeriod" class="form-select" required>
+              <option value="mensual">Mensual</option>
+              <option value="trimestral">Trimestral</option>
+              <option value="anual">Anual</option>
+              <option value="personalizado">Personalizado</option>
+            </select>
+          </div>
+          
+          <div class="form-group" id="customDateRange" style="display: none;">
+            <label class="form-label">Rango de Fechas</label>
+            <div style="display: flex; gap: 1rem;">
+              <input type="date" id="startDate" class="form-control">
+              <input type="date" id="endDate" class="form-control">
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="budgetNotes" class="form-label">Notas (Opcional)</label>
+            <textarea id="budgetNotes" class="form-control" rows="3" placeholder="Agregue cualquier nota adicional..."></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" id="cancelBudgetBtn">Cancelar</button>
+        <button class="btn btn-primary" id="saveBudgetBtn">Guardar Presupuesto</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Script para manejar el modal
+    document.addEventListener('DOMContentLoaded', function() {
+      const newBudgetBtn = document.getElementById('newBudgetBtn');
+      const closeModalBtn = document.getElementById('closeModalBtn');
+      const cancelBudgetBtn = document.getElementById('cancelBudgetBtn');
+      const modal = document.getElementById('newBudgetModal');
+      const budgetPeriod = document.getElementById('budgetPeriod');
+      const customDateRange = document.getElementById('customDateRange');
+      
+      // Mostrar modal
+      newBudgetBtn.addEventListener('click', function() {
+        modal.classList.add('active');
+      });
+      
+      // Ocultar modal
+      function closeModal() {
+        modal.classList.remove('active');
+      }
+      
+      closeModalBtn.addEventListener('click', closeModal);
+      cancelBudgetBtn.addEventListener('click', closeModal);
+      
+      // Mostrar/Ocultar rango de fechas personalizado
+      budgetPeriod.addEventListener('change', function() {
+        if (this.value === 'personalizado') {
+          customDateRange.style.display = 'block';
+        } else {
+          customDateRange.style.display = 'none';
+        }
+      });
+      
+      // Cerrar modal al hacer clic fuera del contenido
+      modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+          closeModal();
+        }
+      });
+      
+      // Cambiar color de la barra de progreso según el porcentaje
+      const progressBars = document.querySelectorAll('.progress');
+      progressBars.forEach(bar => {
+        const width = parseInt(bar.style.width);
+        if (width > 100) {
+          bar.classList.add('progress-danger');
+        } else if (width > 80) {
+          bar.classList.add('progress-warning');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

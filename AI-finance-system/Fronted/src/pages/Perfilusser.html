@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Perfil - Finanzas360</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #2e7d32;
+      --secondary-color: #81c784;
+      --accent-color: #ffab00;
+      --danger-color: #d32f2f;
+      --light-bg: #f5f5f5;
+      --card-bg: #ffffff;
+      --text-dark: #263238;
+      --text-medium: #546e7a;
+      --text-light: #b0bec5;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--light-bg);
+      color: var(--text-dark);
+      line-height: 1.6;
+    }
+    
+    .container {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      min-height: 100vh;
+    }
+    
+    /* Sidebar */
+    .sidebar {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 2rem 1rem;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 2.5rem;
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+    
+    .logo i {
+      font-size: 1.5rem;
+    }
+    
+    .nav-menu {
+      list-style: none;
+    }
+    
+    .nav-item {
+      margin-bottom: 0.75rem;
+    }
+    
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+    
+    .nav-link:hover, .nav-link.active {
+      background-color: rgba(255, 255, 255, 0.15);
+    }
+    
+    .nav-link i {
+      width: 24px;
+      text-align: center;
+    }
+    
+    /* Main Content */
+    .main-content {
+      padding: 2rem;
+    }
+    
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+    
+    .page-title {
+      font-size: 1.75rem;
+      font-weight: 600;
+    }
+    
+    .user-menu {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: var(--secondary-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+    }
+    
+    /* Dashboard Grid */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 1.5rem;
+    }
+    
+    .card {
+      background-color: var(--card-bg);
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+    }
+    
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--text-medium);
+    }
+    
+    .card-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+    
+    .btn {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 6px;
+      font-family: inherit;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .btn-sm {
+      padding: 0.35rem 0.75rem;
+      font-size: 0.85rem;
+    }
+    
+    .btn-primary {
+      background-color: var(--primary-color);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background-color: #1b5e20;
+    }
+    
+    .btn-outline {
+      background-color: transparent;
+      border: 1px solid var(--text-light);
+      color: var(--text-medium);
+    }
+    
+    .btn-outline:hover {
+      border-color: var(--text-medium);
+    }
+    
+    .btn-danger {
+      background-color: var(--danger-color);
+      color: white;
+    }
+    
+    .btn-danger:hover {
+      background-color: #b71c1c;
+    }
+    
+    /* Profile Section */
+    .profile-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+    
+    .profile-avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background-color: var(--secondary-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 2.5rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      position: relative;
+      cursor: pointer;
+      overflow: hidden;
+    }
+    
+    .profile-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .profile-avatar-edit {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      color: white;
+      text-align: center;
+      padding: 0.5rem;
+      font-size: 0.9rem;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .profile-avatar:hover .profile-avatar-edit {
+      opacity: 1;
+    }
+    
+    .profile-name {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+    
+    .profile-email {
+      color: var(--text-medium);
+      margin-bottom: 1rem;
+    }
+    
+    /* Form Styles */
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    
+    .form-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: var(--text-medium);
+    }
+    
+    .form-control {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-family: inherit;
+      transition: border 0.3s ease;
+    }
+    
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary-color);
+    }
+    
+    .form-select {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-family: inherit;
+      background-color: white;
+      cursor: pointer;
+    }
+    
+    /* Financial Goals */
+    .goals-list {
+      list-style: none;
+    }
+    
+    .goal-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      border-radius: 8px;
+      background-color: #f9f9f9;
+      margin-bottom: 0.75rem;
+    }
+    
+    .goal-info h4 {
+      font-size: 1rem;
+      margin-bottom: 0.25rem;
+    }
+    
+    .goal-info p {
+      font-size: 0.85rem;
+      color: var(--text-medium);
+    }
+    
+    .goal-amount {
+      font-weight: 600;
+    }
+    
+    /* Preferences */
+    .preference-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .preference-item:last-child {
+      border-bottom: none;
+    }
+    
+    .preference-label {
+      font-weight: 500;
+    }
+    
+    /* Responsive */
+    @media (max-width: 1200px) {
+      .profile-card {
+        grid-column: span 6;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+      
+      .sidebar {
+        display: none;
+      }
+      
+      .profile-card {
+        grid-column: span 12;
+      }
+    }
+    
+    /* Tabs */
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid #eee;
+      margin-bottom: 1.5rem;
+    }
+    
+    .tab {
+      padding: 0.75rem 1.5rem;
+      cursor: pointer;
+      color: var(--text-medium);
+      font-weight: 500;
+      border-bottom: 2px solid transparent;
+      transition: all 0.3s ease;
+    }
+    
+    .tab.active {
+      color: var(--primary-color);
+      border-bottom-color: var(--primary-color);
+    }
+    
+    /* Modal */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    
+    .modal.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+    
+    .modal-content {
+      background-color: white;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 500px;
+      max-height: 90vh;
+      overflow-y: auto;
+      transform: translateY(20px);
+      transition: transform 0.3s ease;
+    }
+    
+    .modal.active .modal-content {
+      transform: translateY(0);
+    }
+    
+    .modal-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .modal-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+    
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--text-medium);
+    }
+    
+    .modal-body {
+      padding: 1.5rem;
+    }
+    
+    .modal-footer {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid #eee;
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.75rem;
+    }
+    
+    /* Avatar Upload */
+    .avatar-upload {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+    
+    .avatar-preview {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      background-color: #f5f5f5;
+      margin: 0 auto 1rem;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .avatar-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .avatar-upload-btn {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      background-color: var(--primary-color);
+      color: white;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    
+    /* Loading Spinner */
+    .spinner {
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      border: 3px solid rgba(0,0,0,.1);
+      border-radius: 50%;
+      border-top-color: var(--primary-color);
+      animation: spin 1s ease-in-out infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar">
+      <div class="logo">
+        <i class="fas fa-chart-pie"></i>
+        <span>Finanzas360</span>
+      </div>
+      <ul class="nav-menu">
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fas fa-home"></i>
+            <span>Inicio</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fas fa-wallet"></i>
+            <span>Transacciones</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fas fa-chart-line"></i>
+            <span>Presupuestos</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fas fa-file-alt"></i>
+            <span>Reportes</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fas fa-piggy-bank"></i>
+            <span>Ahorros</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link active">
+            <i class="fas fa-user"></i>
+            <span>Perfil</span>
+          </a>
+        </li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <div class="header">
+        <h1 class="page-title">Mi Perfil</h1>
+        <div class="user-menu">
+          <div class="user-avatar">JD</div>
+        </div>
+      </div>
+
+      <div class="dashboard-grid">
+        <!-- Tarjeta de perfil -->
+        <div class="card" style="grid-column: span 4">
+          <div class="profile-section">
+            <div class="profile-avatar" id="profileAvatar">
+              <span>JP</span>
+              <div class="profile-avatar-edit">Cambiar foto</div>
+            </div>
+            <h2 class="profile-name">Juan Pérez</h2>
+            <p class="profile-email">juan.perez@example.com</p>
+            <button class="btn btn-outline">
+              <i class="fas fa-camera"></i> Cambiar foto
+            </button>
+          </div>
+          
+          <div style="margin-top: 2rem;">
+            <h3 style="margin-bottom: 1rem;">Información de Cuenta</h3>
+            <div class="preference-item">
+              <span class="preference-label">Plan Actual</span>
+              <span style="font-weight: 500; color: var(--primary-color);">Premium</span>
+            </div>
+            <div class="preference-item">
+              <span class="preference-label">Miembro desde</span>
+              <span>Enero 2022</span>
+            </div>
+            <div class="preference-item">
+              <span class="preference-label">Último acceso</span>
+              <span>Hoy, 15:30</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Tarjeta de información personal -->
+        <div class="card" style="grid-column: span 8">
+          <div class="tabs">
+            <div class="tab active">Información Personal</div>
+            <div class="tab">Seguridad</div>
+            <div class="tab">Preferencias</div>
+            <div class="tab">Metas Financieras</div>
+          </div>
+          
+          <form id="personalInfoForm">
+            <div class="form-group">
+              <label class="form-label">Nombre Completo</label>
+              <input type="text" class="form-control" value="Juan Pérez">
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Correo Electrónico</label>
+              <input type="email" class="form-control" value="juan.perez@example.com">
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Fecha de Nacimiento</label>
+              <input type="date" class="form-control" value="1985-05-15">
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Género</label>
+              <select class="form-select">
+                <option>Masculino</option>
+                <option>Femenino</option>
+                <option>Otro</option>
+                <option>Prefiero no decir</option>
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Teléfono</label>
+              <input type="tel" class="form-control" value="+52 55 1234 5678">
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">País</label>
+              <select class="form-select">
+                <option selected>México</option>
+                <option>Estados Unidos</option>
+                <option>España</option>
+                <option>Colombia</option>
+                <option>Argentina</option>
+                <option>Otro</option>
+              </select>
+            </div>
+            
+            <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 2rem;">
+              <button type="button" class="btn btn-outline">Cancelar</button>
+              <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save"></i> Guardar Cambios
+              </button>
+            </div>
+          </form>
+        </div>
+        
+        <!-- Tarjeta de información financiera -->
+        <div class="card" style="grid-column: span 6">
+          <div class="card-header">
+            <h3 class="card-title">Información Financiera</h3>
+          </div>
+          
+          <form>
+            <div class="form-group">
+              <label class="form-label">Moneda Principal</label>
+              <select class="form-select">
+                <option selected>Peso Mexicano (MXN)</option>
+                <option>Dólar Estadounidense (USD)</option>
+                <option>Euro (EUR)</option>
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Ingreso Mensual Estimado</label>
+              <input type="number" class="form-control" value="32000">
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Estrategia de Inversión Preferida</label>
+              <select class="form-select">
+                <option>Conservadora</option>
+                <option selected>Moderada</option>
+                <option>Agresiva</option>
+              </select>
+            </div>
+            
+            <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 2rem;">
+              <button type="button" class="btn btn-outline">Cancelar</button>
+              <button type="submit" class="btn btn-primary">Guardar</button>
+            </div>
+          </form>
+        </div>
+        
+        <!-- Tarjeta de metas financieras -->
+        <div class="card" style="grid-column: span 6">
+          <div class="card-header">
+            <h3 class="card-title">Mis Metas Financieras</h3>
+            <button class="btn btn-sm btn-primary">
+              <i class="fas fa-plus"></i> Agregar
+            </button>
+          </div>
+          
+          <ul class="goals-list">
+            <li class="goal-item">
+              <div class="goal-info">
+                <h4>Fondo de Emergencia</h4>
+                <p>Meta: $50,000 MXN • 12 meses</p>
+              </div>
+              <div class="goal-amount">$25,000</div>
+            </li>
+            <li class="goal-item">
+              <div class="goal-info">
+                <h4>Enganche para Casa</h4>
+                <p>Meta: $300,000 MXN • 60 meses</p>
+              </div>
+              <div class="goal-amount">$75,000</div>
+            </li>
+            <li class="goal-item">
+              <div class="goal-info">
+                <h4>Fondo de Retiro</h4>
+                <p>Meta: $2,000,000 MXN • 240 meses</p>
+              </div>
+              <div class="goal-amount">$120,000</div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal para cambiar foto de perfil -->
+  <div class="modal" id="avatarModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Cambiar Foto de Perfil</h3>
+        <button class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="avatar-upload">
+          <div class="avatar-preview" id="avatarPreview">
+            <img src="" alt="Preview" id="avatarPreviewImg" style="display: none;">
+            <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: var(--text-light);">
+              <i class="fas fa-user" style="font-size: 3rem;"></i>
+            </div>
+          </div>
+          <label for="avatarInput" class="avatar-upload-btn">
+            <i class="fas fa-upload"></i> Seleccionar Imagen
+          </label>
+          <input type="file" id="avatarInput" accept="image/*" style="display: none;">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" id="cancelAvatarBtn">Cancelar</button>
+        <button class="btn btn-primary" id="saveAvatarBtn">Guardar Cambios</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Modal para cambiar avatar
+      const avatarModal = document.getElementById('avatarModal');
+      const profileAvatar = document.getElementById('profileAvatar');
+      const cancelAvatarBtn = document.getElementById('cancelAvatarBtn');
+      const saveAvatarBtn = document.getElementById('saveAvatarBtn');
+      const avatarInput = document.getElementById('avatarInput');
+      const avatarPreviewImg = document.getElementById('avatarPreviewImg');
+      const avatarPreview = document.getElementById('avatarPreview');
+      
+      // Mostrar modal al hacer clic en el avatar
+      profileAvatar.addEventListener('click', function() {
+        avatarModal.classList.add('active');
+      });
+      
+      // Cerrar modal
+      function closeAvatarModal() {
+        avatarModal.classList.remove('active');
+      }
+      
+      document.querySelector('.modal-close').addEventListener('click', closeAvatarModal);
+      cancelAvatarBtn.addEventListener('click', closeAvatarModal);
+      
+      // Previsualizar imagen seleccionada
+      avatarInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function(event) {
+            avatarPreviewImg.src = event.target.result;
+            avatarPreviewImg.style.display = 'block';
+            avatarPreview.querySelector('div').style.display = 'none';
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+      
+      // Guardar cambios (simulado)
+      saveAvatarBtn.addEventListener('click', function() {
+        saveAvatarBtn.innerHTML = '<span class="spinner"></span> Guardando...';
+        setTimeout(function() {
+          saveAvatarBtn.innerHTML = '<i class="fas fa-check"></i> Guardado';
+          setTimeout(closeAvatarModal, 1000);
+        }, 1500);
+      });
+      
+      // Cerrar modal al hacer clic fuera
+      avatarModal.addEventListener('click', function(e) {
+        if (e.target === avatarModal) {
+          closeAvatarModal();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
